@@ -1,0 +1,2405 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>➤ God 𝝅 MATH </title>
+  
+  <!-- 引入 KaTeX 數學渲染庫 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+
+  <style>
+    /* --------------------------------------------------
+       全站基礎與暗色主題設定 (CSS Variables)
+    -------------------------------------------------- */
+    :root {
+      --bg-color: #121212;
+      --card-bg: #1e1e24;
+      --card-hover: #2a2a32;
+      --primary: #6366f1;
+      --primary-hover: #4f46e5;
+      --primary-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+      --text-main: #f3f4f6;
+      --text-muted: #9ca3af;
+      --border-color: #374151;
+      --modal-bg: rgba(0, 0, 0, 0.75);
+      --radius: 12px;
+      --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.5);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow-x: hidden;
+    }
+
+    body.modal-open {
+      overflow: hidden;
+    }
+
+    /* --------------------------------------------------
+       頁面切換控制 (Views)
+    -------------------------------------------------- */
+    .view {
+      display: none;
+      width: 100%;
+      max-width: 1200px;
+      padding: 2rem;
+      animation: fadeIn 0.4s ease-in-out forwards;
+    }
+
+    .view.active {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* --------------------------------------------------
+       頁面 1：首頁 UI
+    -------------------------------------------------- */
+    #page-home {
+      text-align: center;
+    }
+
+    .home-title {
+      font-size: 4rem;
+      font-weight: 800;
+      margin-bottom: 2rem;
+      background: var(--primary-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: 2px;
+    }
+
+    .btn-gradient {
+      background: var(--primary-gradient);
+      color: #fff;
+      border: none;
+      padding: 1rem 2.5rem;
+      font-size: 1.25rem;
+      font-weight: 600;
+      border-radius: 50px;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .btn-gradient:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(99, 102, 241, 0.6);
+    }
+
+    /* --------------------------------------------------
+       頁面 2：功能選單 UI 與工具列
+    -------------------------------------------------- */
+    .menu-header {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .menu-title {
+      font-size: 2rem;
+      font-weight: 700;
+    }
+
+    /* 上方外部連結框 */
+    .toolbar-section {
+      width: 100%;
+      background: linear-gradient(
+        180deg,
+        rgba(30, 30, 42, 0.95) 0%,
+        rgba(168, 85, 247, 0.12) 55%,
+        rgba(18, 18, 18, 0) 100%
+      );
+      border: 1px solid rgba(168, 85, 247, 0.35);
+      border-bottom: 1px solid rgba(168, 85, 247, 0.05);
+      border-radius: var(--radius);
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 1.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      box-shadow: 0 8px 32px 0 rgba(168, 85, 247, 0.25), 0 0 25px 5px rgba(99, 102, 241, 0.2);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      position: relative;
+    }
+
+    .toolbar-group {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+    }
+
+    .toolbar-label {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #c084fc;
+      margin-right: 0.2rem;
+      text-shadow: 0 0 8px rgba(192, 132, 252, 0.4);
+    }
+
+    .btn-tool {
+      background: #2b2b36;
+      color: var(--text-main);
+      border: 1px solid var(--border-color);
+      padding: 0.45rem 0.9rem;
+      border-radius: 8px;
+      font-size: 0.88rem;
+      font-weight: 500;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      transition: all 0.3s ease;
+    }
+
+    .btn-tool:hover {
+      background: #3b3b4a;
+      border-color: var(--primary);
+      color: #fff;
+      transform: translateY(-1px);
+    }
+
+    .btn-external {
+      background: linear-gradient(
+        135deg,
+        rgba(168, 85, 247, 0.25) 0%,
+        rgba(99, 102, 241, 0.15) 60%,
+        rgba(0, 0, 0, 0) 100%
+      );
+      border: 1px solid rgba(168, 85, 247, 0.45);
+      color: #e9d5ff;
+      box-shadow: 0 0 15px rgba(168, 85, 247, 0.3), inset 0 0 10px rgba(168, 85, 247, 0.1);
+      backdrop-filter: blur(4px);
+    }
+
+    .btn-external:hover {
+      background: linear-gradient(
+        135deg,
+        rgba(168, 85, 247, 0.5) 0%,
+        rgba(99, 102, 241, 0.3) 80%,
+        rgba(168, 85, 247, 0.05) 100%
+      );
+      border-color: #c084fc;
+      color: #ffffff;
+      box-shadow: 0 0 25px rgba(168, 85, 247, 0.7), 0 0 40px rgba(99, 102, 241, 0.4);
+      transform: translateY(-2px);
+    }
+
+    .grid-container {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      width: 100%;
+    }
+
+    /* 多色漸變流光動態邊框 */
+    .card {
+      position: relative;
+      background-color: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      min-height: 160px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      transition: all 0.3s ease;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      z-index: 1;
+      border: none;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 300%;
+      aspect-ratio: 1 / 1;
+      background: conic-gradient(
+        from 0deg,
+        #ff007f,
+        #a855f7,
+        #6366f1,
+        #00dfd8,
+        #10b981,
+        #facc15,
+        #ff007f
+      );
+      animation: rotateBorderGlow 4s linear infinite;
+      z-index: -2;
+      transform: translate(-50%, -50%);
+    }
+
+    .card::after {
+      content: '';
+      position: absolute;
+      inset: 2px;
+      background: var(--card-bg);
+      border-radius: calc(var(--radius) - 2px);
+      z-index: -1;
+      transition: background 0.3s ease;
+    }
+
+    .card.interactive {
+      cursor: pointer;
+    }
+
+    .card.interactive:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 35px rgba(168, 85, 247, 0.4), 0 0 20px rgba(99, 102, 241, 0.3);
+    }
+
+    .card.interactive:hover::after {
+      background-color: var(--card-hover);
+    }
+
+    @keyframes rotateBorderGlow {
+      0% {
+        transform: translate(-50%, -50%) rotate(0deg);
+      }
+      100% {
+        transform: translate(-50%, -50%) rotate(360deg);
+      }
+    }
+
+    .card-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--text-main);
+      margin-bottom: 0.5rem;
+    }
+
+    .card-subtitle {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    /* --------------------------------------------------
+       進制轉換器與反三角函數專用 Layout
+    -------------------------------------------------- */
+    .base-conv-top {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 1rem;
+      align-items: center;
+      width: 100%;
+      background: rgba(0,0,0,0.2);
+      padding: 1rem;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+    }
+
+    .base-box {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .base-box label {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .swap-btn {
+      background: var(--primary);
+      color: white;
+      border: none;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      font-size: 1.2rem;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: transform 0.2s, background 0.2s;
+    }
+
+    .swap-btn:hover {
+      background: var(--primary-hover);
+      transform: rotate(180deg);
+    }
+
+    .radio-group {
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+      background: rgba(0,0,0,0.2);
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+      justify-content: center;
+    }
+
+    .radio-group label {
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.95rem;
+    }
+
+    /* --------------------------------------------------
+       彈窗 / Modal (通用樣式)
+    -------------------------------------------------- */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: var(--modal-bg);
+      backdrop-filter: blur(5px);
+      z-index: 100;
+      justify-content: center;
+      align-items: center;
+      padding: 1.5rem;
+      overscroll-behavior: contain;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      width: 100%;
+      max-width: 950px;
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: var(--shadow);
+      animation: modalUp 0.3s ease;
+      overflow: hidden;
+    }
+
+    @keyframes modalUp {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .modal-header {
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+    }
+
+    .close-btn {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 1.8rem;
+      cursor: pointer;
+      line-height: 1;
+    }
+
+    .close-btn:hover {
+      color: var(--text-main);
+    }
+
+    .modal-body {
+      padding: 1.5rem;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    /* 通用元件與按鈕 */
+    .btn {
+      padding: 0.6rem 1.2rem;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+      background: #2b2b36;
+      color: var(--text-main);
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn:hover {
+      background: #3b3b4a;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      border: none;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-hover);
+    }
+
+    .btn-toggle {
+      background-color: #10b981;
+      color: white;
+      border: none;
+    }
+
+    .btn-toggle:hover {
+      background-color: #059669;
+    }
+
+    .form-group {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .input-text, .input-num, .select-base {
+      padding: 0.5rem;
+      border-radius: 6px;
+      border: 1px solid var(--border-color);
+      background: var(--bg-color);
+      color: var(--text-main);
+      font-size: 0.95rem;
+    }
+
+    .input-num {
+      width: 75px;
+      text-align: center;
+    }
+
+    .matrix-grid-wrapper {
+      overflow-x: auto;
+      padding: 0.5rem 0;
+    }
+
+    .matrix-input-table {
+      border-collapse: separate;
+      border-spacing: 6px;
+      margin: 0 auto;
+    }
+
+    .matrix-input-table td input {
+      width: 65px;
+      padding: 0.5rem;
+      border-radius: 6px;
+      border: 1px solid var(--border-color);
+      background: var(--bg-color);
+      color: var(--text-main);
+      text-align: center;
+      font-size: 0.95rem;
+    }
+
+    .matrix-input-table td.augmented-sep {
+      border-right: 2px dashed var(--primary);
+      padding-right: 6px;
+    }
+
+    .result-card {
+      background: rgba(0, 0, 0, 0.25);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 1rem;
+      margin-top: 0.5rem;
+    }
+
+    .result-title {
+      font-weight: 600;
+      color: #a855f7;
+      margin-bottom: 0.5rem;
+    }
+
+    /* 表格控制 (數據顯示) */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 0.5rem;
+    }
+
+    .data-table th, .data-table td {
+      border: 1px solid var(--border-color);
+      padding: 0.5rem;
+      text-align: center;
+      font-size: 0.9rem;
+    }
+
+    .data-table th {
+      background: #252530;
+      color: #a5b4fc;
+    }
+
+    /* 高等計算機樣式 */
+    #calc-modal .modal-content { max-width: 540px; }
+    .calc-display-wrapper {
+      background: #0d0d14; border: 1px solid var(--border-color); border-radius: 10px;
+      padding: 1rem 1.2rem; margin-bottom: 1rem; min-height: 90px;
+      display: flex; flex-direction: column; align-items: flex-end; justify-content: flex-end; gap: 4px;
+    }
+    .calc-history { font-size: 0.8rem; color: var(--text-muted); min-height: 1.2em; word-break: break-all; text-align: right; }
+    .calc-expr { font-size: 1.1rem; color: #a5b4fc; word-break: break-all; text-align: right; }
+    .calc-result { font-size: 2rem; font-weight: 700; color: var(--text-main); word-break: break-all; text-align: right; font-family: "Fira Code", monospace; }
+    .calc-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+    .calc-btn { padding: 0.75rem 0.4rem; border-radius: 8px; border: 1px solid var(--border-color); background: #2b2b36; color: var(--text-main); font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: all 0.15s; text-align: center; line-height: 1.2; }
+    .calc-btn:hover { background: #3c3c4e; transform: translateY(-1px); }
+    .calc-btn.fn { background: #1e2a3a; color: #60a5fa; border-color: #1e3a5f; }
+    .calc-btn.op { background: #2a1f3a; color: #c084fc; border-color: #4c1d95; }
+    .calc-btn.eq { background: var(--primary-gradient); color: #fff; border: none; }
+    .calc-btn.clear { background: #3a1f1f; color: #f87171; border-color: #7f1d1d; }
+    .calc-btn.num { background: #23232f; }
+    .calc-btn.const { background: #1a2e1a; color: #4ade80; border-color: #14532d; }
+    .calc-btn.span2 { grid-column: span 2; }
+    .calc-history-list { max-height: 120px; overflow-y: auto; background: #0d0d14; border: 1px solid var(--border-color); border-radius: 8px; padding: 0.5rem 0.75rem; margin-top: 0.75rem; display: none; }
+    .calc-history-list.show { display: block; }
+    .calc-history-item { font-size: 0.8rem; color: var(--text-muted); padding: 3px 0; border-bottom: 1px solid #1e1e2a; cursor: pointer; text-align: right; }
+
+    /* --------------------------------------------------
+       排列組合工具專用 UI 樣式 (含數字 9 格鍵)
+    -------------------------------------------------- */
+    .perm-box-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5rem;
+      background: rgba(0,0,0,0.2);
+      padding: 1.5rem;
+      border-radius: var(--radius);
+      border: 1px solid var(--border-color);
+    }
+
+    .perm-notation-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      font-size: 3.5rem;
+      font-weight: 800;
+      color: #a855f7;
+      user-select: none;
+    }
+
+    .perm-script-group {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 95px;
+    }
+
+    .perm-input-box {
+      width: 75px;
+      height: 42px;
+      text-align: center;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #4ade80;
+      background: var(--bg-color);
+      border: 2px solid var(--border-color);
+      border-radius: 8px;
+      outline: none;
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+
+    .perm-input-box:focus, .perm-input-box.active {
+      border-color: #a855f7;
+      box-shadow: 0 0 12px rgba(168, 85, 247, 0.6);
+      background: #1a1a24;
+    }
+
+    .perm-unk-row {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      font-size: 1.2rem;
+      color: var(--text-main);
+    }
+
+    /* 數字 9 格鍵盤 (Keypad) Layout */
+    .numpad-container {
+      width: 100%;
+      max-width: 280px;
+      margin: 0.5rem auto 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .numpad-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
+    .numpad-btn {
+      padding: 0.85rem 0;
+      font-size: 1.25rem;
+      font-weight: 700;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+      background: #2b2b36;
+      color: var(--text-main);
+      cursor: pointer;
+      transition: all 0.15s ease;
+      text-align: center;
+      user-select: none;
+    }
+
+    .numpad-btn:hover {
+      background: #3b3b4a;
+      border-color: var(--primary);
+      transform: translateY(-2px);
+    }
+
+    .numpad-btn:active {
+      transform: translateY(0);
+    }
+
+    .numpad-btn.enter-btn {
+      background: var(--primary-gradient);
+      color: white;
+      border: none;
+    }
+
+    .numpad-btn.clear-btn {
+      background: #3a1f1f;
+      color: #f87171;
+      border-color: #7f1d1d;
+    }
+
+    @media (max-width: 768px) {
+      .grid-container { grid-template-columns: repeat(1, 1fr); }
+      .home-title { font-size: 2.8rem; }
+      .toolbar-section { flex-direction: column; align-items: stretch; }
+      .base-conv-top { grid-template-columns: 1fr; gap: 0.75rem; }
+      .swap-btn { margin: 0 auto; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ================= 頁面 1：首頁 ================= -->
+  <section id="page-home" class="view active">
+    <h1 class="home-title">GodMATH</h1>
+    <p style="color: var(--text-muted); margin-bottom: 2rem;">為了解決數學麻煩以及原文書解答都只有單數題沒有雙數題的答案所以一位老兄費盡千辛萬苦的花了零個日日夜夜請AI寫出了一個小程序</p>
+    <button class="btn-gradient" onclick="navigateTo('page-menu')">進入功能選單</button>
+  </section>
+
+  <!-- ================= 頁面 2：功能選單 ================= -->
+  <section id="page-menu" class="view">
+    <div class="menu-header">
+      <h2 class="menu-title">功能選單</h2>
+      <button class="btn" onclick="navigateTo('page-home')">返回首頁</button>
+    </div>
+
+    <!-- 外鏈選單工具列 -->
+    <div class="toolbar-section">
+      <div class="toolbar-group">
+        <span class="toolbar-label">🔗 外部工具跳轉：</span>
+        <a href="https://gemini.google.com" target="_blank" class="btn-tool btn-external">Gemini</a>
+        <a href="https://www.desmos.com/calculator" target="_blank" class="btn-tool btn-external">Desmos</a>
+        <a href="https://chatgpt.com" target="_blank" class="btn-tool btn-external">GPT</a>
+        <a href="https://www.youtube.com" target="_blank" class="btn-tool btn-external">YT</a>
+        <a href="https://ifvjdjohf.github.io/GPT-MATH/" target="_blank" class="btn-tool btn-external">tool</a>
+        <a href="https://ifvjdjohf.github.io/Turn-the-draw-to-f-x-/" target="_blank" class="btn-tool btn-external">F(x)</a>
+        <a href="https://ifvjdjohf.github.io/turn-the-draw-to-f-y-/" target="_blank" class="btn-tool btn-external">F(y)</a>
+      </div>
+    </div>
+    
+    <div class="grid-container">
+      <!-- 工具：排組計算 (新工具 1) -->
+      <div class="card interactive" onclick="openModal('perm-calc-modal')">
+        <h3 class="card-title">🎲 排組計算</h3>
+        <p class="card-subtitle">P / C / H 排列組合快速精確運算</p>
+      </div>
+
+      <!-- 工具：解排組未知數 (新工具 2) -->
+      <div class="card interactive" onclick="openModal('perm-unk-modal')">
+        <h3 class="card-title">🔍 解排組未知數</h3>
+        <p class="card-subtitle">求解 P / C / H 方程式中的未知數 n</p>
+      </div>
+
+      <!-- 工具 1 -->
+      <div class="card interactive" onclick="openGaussModal()">
+        <h3 class="card-title">高斯消去法計算工具</h3>
+        <p class="card-subtitle">精確分數運算 / RREF 求解</p>
+      </div>
+
+      <!-- 工具 2 -->
+      <div class="card interactive" onclick="openCalcModal()">
+        <h3 class="card-title">🔢 高等計算機</h3>
+        <p class="card-subtitle">科學計算 / 三角函數 / 歷史記錄</p>
+      </div>
+
+      <!-- 工具 3：多進制換算器 -->
+      <div class="card interactive" onclick="openModal('base-modal')">
+        <h3 class="card-title">🔄 多進制換算器</h3>
+        <p class="card-subtitle">2 / 8 / 10 / 16 / 36 進制雙向自由轉換</p>
+      </div>
+
+      <!-- 工具 4：反三角函數計算器 -->
+      <div class="card interactive" onclick="openModal('asin-modal')">
+        <h3 class="card-title">📐 反三角函數計算器</h3>
+        <p class="card-subtitle">arcsin / arccos / arctan (角度/弧度切換)</p>
+      </div>
+
+      <!-- 工具 5 -->
+      <div class="card interactive" onclick="openModal('decomp-modal')">
+        <h3 class="card-title">矩陣分解工具</h3>
+        <p class="card-subtitle">LU / QR (Gram-Schmidt) / 特徵分解 / SVD</p>
+      </div>
+
+      <!-- 工具 6 -->
+      <div class="card interactive" onclick="openModal('det-modal')">
+        <h3 class="card-title">行列式與逆矩陣</h3>
+        <p class="card-subtitle">Det / Trace / 逆矩陣 (分數精確化)</p>
+      </div>
+
+      <!-- 工具 7 -->
+      <div class="card interactive" onclick="openModal('iter-modal')">
+        <h3 class="card-title">線性系統疊代法</h3>
+        <p class="card-subtitle">Jacobi / Gauss-Seidel / SOR 逐輪收斂</p>
+      </div>
+
+      <!-- 工具 8 -->
+      <div class="card interactive" onclick="openModal('root-modal')">
+        <h3 class="card-title">非線性方程求根</h3>
+        <p class="card-subtitle">二分法 / 牛頓法 / 割線法</p>
+      </div>
+
+      <!-- 工具 9 -->
+      <div class="card interactive" onclick="openModal('calc-num-modal')">
+        <h3 class="card-title">數值微積分</h3>
+        <p class="card-subtitle">梯形法 / Simpson 法則 / 差分微分</p>
+      </div>
+
+      <!-- 工具 10 -->
+      <div class="card interactive" onclick="openModal('interp-modal')">
+        <h3 class="card-title">插值與最小二乘法</h3>
+        <p class="card-subtitle">Lagrange / Newton 插值 / 多項式擬合</p>
+      </div>
+
+      <!-- 工具 11 -->
+      <div class="card interactive" onclick="openModal('ode-modal')">
+        <h3 class="card-title">常微分方程數值解 (ODE)</h3>
+        <p class="card-subtitle">Euler / 補償 Euler / 經典 RK4</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 彈窗：排組計算 (新工具 1) ================= -->
+  <div id="perm-calc-modal" class="modal-overlay">
+    <div class="modal-content" style="max-width: 520px;">
+      <div class="modal-header">
+        <h3 class="modal-title">🎲 排組計算</h3>
+        <button class="close-btn" onclick="closeModal('perm-calc-modal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="radio-group">
+          <label><input type="radio" name="perm-type" value="P" checked onchange="updatePermTypeDisplay()"> P (排列)</label>
+          <label><input type="radio" name="perm-type" value="C" onchange="updatePermTypeDisplay()"> C (組合)</label>
+          <label><input type="radio" name="perm-type" value="H" onchange="updatePermTypeDisplay()"> H (重複組合)</label>
+        </div>
+
+        <div class="perm-box-container">
+          <div class="perm-notation-wrapper">
+            <span id="perm-symbol-text">P</span>
+            <div class="perm-script-group">
+              <input type="text" id="perm-n" class="perm-input-box numpad-input" placeholder="n">
+              <input type="text" id="perm-r" class="perm-input-box numpad-input" placeholder="r">
+            </div>
+          </div>
+
+          <!-- 數字 9 格鍵盤 -->
+          <div class="numpad-container">
+            <div class="numpad-grid">
+              <button class="numpad-btn" onclick="pressNumpadKey('1')">1</button>
+              <button class="numpad-btn" onclick="pressNumpadKey('2')">2</button>
+              <button class="numpad-btn" onclick="pressNumpadKey('3')">3</button>
+              <button class="numpad-btn" onclick="pressNumpadKey('4')">4</button>
+              <button class="numpad-btn" onclick="pressNumpadKey('5')">5</button>
+              <button class="numpad-btn" onclick="pressNumpadKey('6')">6</button>
+              <button class="numpad-btn" onclick="pressNumpadKey('7')">7</button>
+              <button class="numpad-btn" onclick="pressNumpadKey('8')">8</button>
+              <button class="numpad-btn" onclick="pressNumpadKey('9')">9</button>
+              <button class="numpad-btn clear-btn" onclick="pressNumpadClear()">C</button>
+              <button class="numpad-btn" onclick="pressNumpadKey('0')">0</button>
+              <button class="numpad-btn enter-btn" onclick="pressNumpadEnter()">↵ Enter</button>
+            </div>
+          </div>
+
+          <button class="btn btn-primary" style="width:100%; font-size:1.1rem; padding:0.75rem;" onclick="calcPermutation()">開始計算</button>
+        </div>
+
+        <div id="perm-calc-output"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= 彈窗：解排組未知數 (新工具 2) ================= -->
+  <div id="perm-unk-modal" class="modal-overlay">
+    <div class="modal-content" style="max-width: 600px;">
+      <div class="modal-header">
+        <h3 class="modal-title">🔍 解排組未知數</h3>
+        <button class="close-btn" onclick="closeModal('perm-unk-modal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="radio-group">
+          <label><input type="radio" name="unk-type" value="P" checked onchange="updateUnkTypeDisplay()"> P (排列)</label>
+          <label><input type="radio" name="unk-type" value="C" onchange="updateUnkTypeDisplay()"> C (組合)</label>
+          <label><input type="radio" name="unk-type" value="H" onchange="updateUnkTypeDisplay()"> H (重複組合)</label>
+        </div>
+
+        <div class="perm-box-container">
+          <div class="perm-notation-wrapper" style="gap:0.8rem; flex-wrap:wrap;">
+            <span id="unk-symbol-text">P</span>
+            <div class="perm-script-group">
+              <div class="perm-unk-row">
+                <span style="font-size:1.2rem; font-weight:bold; color:#a5b4fc;">n+</span>
+                <input type="text" id="unk-a" class="perm-input-box numpad-input" placeholder="0">
+              </div>
+              <div class="perm-unk-row">
+                <input type="text" id="unk-r" class="perm-input-box numpad-input" placeholder="r">
+              </div>
+            </div>
+            <span style="font-size:2.5rem; color:var(--text-main); margin:0 0.2rem;">=</span>
+            <input type="text" id="unk-k" class="perm-input-box numpad-input" style="width:110px; height:50px; font-size:1.4rem;" placeholder="填空格">
+          </div>
+
+          <!-- 數字 9 格鍵盤 -->
+          <div class="numpad-container">
+            <div class="numpad-grid">
+              <button class="numpad-btn" onclick="pressNumpadKey('1')">1</button>
+              <button class="numpad-btn" onclick="pressNumpadKey('2')">2</button>
+              <button class="numpad-btn" onclick="pressNumpadKey('3')">3</button>
+              <button class="numpad-btn" onclick="pressNumpadKey('4')">4</button>
+              <button class="numpad-btn" onclick="pressNumpadKey('5')">5</button>
+              <button class="numpad-btn" onclick="pressNumpadKey('6')">6</button>
+              <button class="numpad-btn" onclick="pressNumpadKey('7')">7</button>
+              <button class="numpad-btn" onclick="pressNumpadKey('8')">8</button>
+              <button class="numpad-btn" onclick="pressNumpadKey('9')">9</button>
+              <button class="numpad-btn clear-btn" onclick="pressNumpadClear()">C</button>
+              <button class="numpad-btn" onclick="pressNumpadKey('0')">0</button>
+              <button class="numpad-btn enter-btn" onclick="pressNumpadEnter()">↵ Enter</button>
+            </div>
+          </div>
+
+          <button class="btn btn-primary" style="width:100%; font-size:1.1rem; padding:0.75rem;" onclick="solvePermUnknown()">開始計算</button>
+        </div>
+
+        <div id="perm-unk-output"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= 彈窗：多進制換算器 ================= -->
+  <div id="base-modal" class="modal-overlay">
+    <div class="modal-content" style="max-width: 650px;">
+      <div class="modal-header">
+        <h3 class="modal-title">🔄 多進制換算器 (Base Converter)</h3>
+        <button class="close-btn" onclick="closeModal('base-modal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="base-conv-top">
+          <div class="base-box">
+            <label>來源進制 (Base)</label>
+            <select id="src-base" class="select-base" onchange="convertBase()">
+              <option value="2">2 進制 (Binary)</option>
+              <option value="8">8 進制 (Octal)</option>
+              <option value="10" selected>10 進制 (Decimal)</option>
+              <option value="16">16 進制 (Hexadecimal)</option>
+              <option value="36">36 進制 (Base-36)</option>
+            </select>
+          </div>
+          <button class="swap-btn" onclick="swapBases()" title="對調進制">↔</button>
+          <div class="base-box">
+            <label>目標進制 (Base)</label>
+            <select id="tgt-base" class="select-base" onchange="convertBase()">
+              <option value="2" selected>2 進制 (Binary)</option>
+              <option value="8">8 進制 (Octal)</option>
+              <option value="10">10 進制 (Decimal)</option>
+              <option value="16">16 進制 (Hexadecimal)</option>
+              <option value="36">36 進制 (Base-36)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group" style="flex-direction: column; align-items: stretch; gap: 0.5rem; margin-top:0.5rem;">
+          <label style="font-weight: 600;">請輸入數值：</label>
+          <input type="text" id="base-input" class="input-text" placeholder="例如：255 或 11111111" value="255" oninput="convertBase()" style="font-size: 1.1rem; padding: 0.75rem;">
+        </div>
+
+        <div class="result-card">
+          <div class="result-title">換算結果</div>
+          <div id="base-output-val" style="font-size: 1.5rem; font-weight: 700; color: #4ade80; word-break: break-all; font-family: monospace;">-</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= 彈窗：反三角函數計算器 ================= -->
+  <div id="asin-modal" class="modal-overlay">
+    <div class="modal-content" style="max-width: 600px;">
+      <div class="modal-header">
+        <h3 class="modal-title">📐 反三角函數計算器</h3>
+        <button class="close-btn" onclick="closeModal('asin-modal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="radio-group">
+          <span style="font-weight:600; color:var(--text-muted);">輸出單位：</span>
+          <label><input type="radio" name="inv-unit" value="deg" checked onchange="calcInvTrig()"> 角度 (Degrees °)</label>
+          <label><input type="radio" name="inv-unit" value="rad" onchange="calcInvTrig()"> 弧度 (Radians rad)</label>
+        </div>
+
+        <div class="form-group" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem;">
+          <div style="display:flex; flex-direction:column; gap:0.3rem;">
+            <label style="font-size:0.85rem; color:var(--text-muted);">輸入 x 值 [-1, 1]</label>
+            <input type="text" id="inv-x-asin" class="input-text" value="0.5" oninput="calcInvTrig()">
+          </div>
+          <div style="display:flex; flex-direction:column; gap:0.3rem;">
+            <label style="font-size:0.85rem; color:var(--text-muted);">輸入 x 值 [-1, 1]</label>
+            <input type="text" id="inv-x-acos" class="input-text" value="0.5" oninput="calcInvTrig()">
+          </div>
+          <div style="display:flex; flex-direction:column; gap:0.3rem;">
+            <label style="font-size:0.85rem; color:var(--text-muted);">輸入 x 值 (任意實數)</label>
+            <input type="text" id="inv-x-atan" class="input-text" value="1" oninput="calcInvTrig()">
+          </div>
+        </div>
+
+        <div id="inv-trig-output"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= 彈窗 1：高斯消去法計算工具 ================= -->
+  <div id="gauss-modal" class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">高斯消去法計算工具 (全程分數精確運算)</h3>
+        <button class="close-btn" onclick="closeGaussModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>增廣矩陣大小：</label>
+          <input type="number" id="input-m" class="input-num" value="3" min="1" max="6"> 列 (m) &times;
+          <input type="number" id="input-n" class="input-num" value="3" min="1" max="6"> + 1 行 (n+1)
+          <button class="btn btn-primary" onclick="generateMatrixInput()">生成矩陣</button>
+        </div>
+        <div id="matrix-input-section" style="display: none;">
+          <hr style="border-color: var(--border-color); margin: 0.5rem 0;">
+          <p style="font-size: 0.9rem; color: var(--text-muted);">請輸入矩陣係數與常數項 (僅限整數)：</p>
+          <div class="matrix-grid-wrapper">
+            <table class="matrix-input-table" id="matrix-table"></table>
+          </div>
+          <div class="form-group" style="margin-top: 1rem;">
+            <button class="btn btn-primary" onclick="calculateGauss()">開始計算</button>
+            <button class="btn" onclick="clearMatrixInputs()">清空重填</button>
+          </div>
+        </div>
+        <div id="output-section"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= 彈窗 2：高等計算機 ================= -->
+  <div id="calc-modal" class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">🔢 高等計算機</h3>
+        <button class="close-btn" onclick="closeCalcModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="calc-display-wrapper">
+          <div class="calc-history" id="calc-hist-display"></div>
+          <div class="calc-expr" id="calc-expr-display"></div>
+          <div class="calc-result" id="calc-result-display">0</div>
+        </div>
+        <div class="calc-deg-toggle" style="display:flex; gap:0.5rem; font-size:0.85rem; color:var(--text-muted); margin-bottom:0.5rem;">
+          <input type="checkbox" id="calc-use-deg" checked>
+          <label for="calc-use-deg">角度模式 (DEG)｜取消勾選為弧度 (RAD)</label>
+        </div>
+        <div class="calc-grid">
+          <button class="calc-btn fn" onclick="calcFn('sin(')">sin</button>
+          <button class="calc-btn fn" onclick="calcFn('cos(')">cos</button>
+          <button class="calc-btn fn" onclick="calcFn('tan(')">tan</button>
+          <button class="calc-btn fn" onclick="calcFn('log(')">log₁₀</button>
+          <button class="calc-btn fn" onclick="calcFn('ln(')">ln</button>
+          <button class="calc-btn fn" onclick="calcFn('asin(')">sin⁻¹</button>
+          <button class="calc-btn fn" onclick="calcFn('acos(')">cos⁻¹</button>
+          <button class="calc-btn fn" onclick="calcFn('atan(')">tan⁻¹</button>
+          <button class="calc-btn fn" onclick="calcFn('sqrt(')">√</button>
+          <button class="calc-btn fn" onclick="calcFn('^')">xⁿ</button>
+          <button class="calc-btn const" onclick="calcInput('π')">π</button>
+          <button class="calc-btn const" onclick="calcInput('e')">e</button>
+          <button class="calc-btn op" onclick="calcInput('(')">(</button>
+          <button class="calc-btn op" onclick="calcInput(')')">)</button>
+          <button class="calc-btn op" onclick="calcPercent()">%</button>
+          <button class="calc-btn clear span2" onclick="calcClear()">AC</button>
+          <button class="calc-btn clear" onclick="calcDel()">⌫</button>
+          <button class="calc-btn fn" onclick="calcToggleSign()">±</button>
+          <button class="calc-btn op" onclick="calcInput('÷')">÷</button>
+          <button class="calc-btn num" onclick="calcInput('7')">7</button>
+          <button class="calc-btn num" onclick="calcInput('8')">8</button>
+          <button class="calc-btn num" onclick="calcInput('9')">9</button>
+          <button class="calc-btn op span2" onclick="calcInput('×')">×</button>
+          <button class="calc-btn num" onclick="calcInput('4')">4</button>
+          <button class="calc-btn num" onclick="calcInput('5')">5</button>
+          <button class="calc-btn num" onclick="calcInput('6')">6</button>
+          <button class="calc-btn op span2" onclick="calcInput('−')">−</button>
+          <button class="calc-btn num" onclick="calcInput('1')">1</button>
+          <button class="calc-btn num" onclick="calcInput('2')">2</button>
+          <button class="calc-btn num" onclick="calcInput('3')">3</button>
+          <button class="calc-btn op span2" onclick="calcInput('+')">+</button>
+          <button class="calc-btn num span2" onclick="calcInput('0')">0</button>
+          <button class="calc-btn num" onclick="calcInput('.')">.</button>
+          <button class="calc-btn eq span2" onclick="calcEquals()">=</button>
+        </div>
+        <div id="calc-history-list" class="calc-history-list"></div>
+        <button class="btn" style="margin-top:0.5rem;font-size:0.8rem;" onclick="toggleCalcHistory()">顯示/隱藏歷史紀錄</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= 彈窗 3：矩陣分解工具 ================= -->
+  <div id="decomp-modal" class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">矩陣分解工具 (LU / QR / Eig / SVD)</h3>
+        <button class="close-btn" onclick="closeModal('decomp-modal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>方陣階數 (n &times; n)：</label>
+          <input type="number" id="decomp-n" class="input-num" value="3" min="2" max="5">
+          <button class="btn btn-primary" onclick="initMatrixInput('decomp-grid', 'decomp-n', 'decomp-n')">生成輸入表</button>
+        </div>
+        <div id="decomp-grid" class="matrix-grid-wrapper"></div>
+        <div class="form-group">
+          <button class="btn btn-primary" onclick="runLUDecomp()">LU 分解</button>
+          <button class="btn btn-primary" onclick="runQRDecomp()">QR 分解 (Gram-Schmidt)</button>
+          <button class="btn btn-primary" onclick="runEigDecomp()">特徵分解 (Eigen)</button>
+        </div>
+        <div id="decomp-output"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= 彈窗 4：行列式、逆矩陣 ================= -->
+  <div id="det-modal" class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">行列式與逆矩陣分析 (分數精確運算)</h3>
+        <button class="close-btn" onclick="closeModal('det-modal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>方陣階數 (n &times; n)：</label>
+          <input type="number" id="det-n" class="input-num" value="3" min="2" max="5">
+          <button class="btn btn-primary" onclick="initMatrixInput('det-grid', 'det-n', 'det-n')">生成輸入表</button>
+        </div>
+        <div id="det-grid" class="matrix-grid-wrapper"></div>
+        <button class="btn btn-primary" onclick="runDetInverse()">分析矩陣 (Det, Trace, 分數逆矩陣)</button>
+        <div id="det-output"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= 彈窗 5：線性系統疊代法 ================= -->
+  <div id="iter-modal" class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">線性系統疊代求解 (Jacobi / Gauss-Seidel / SOR)</h3>
+        <button class="close-btn" onclick="closeModal('iter-modal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>未知數個數 (n)：</label>
+          <input type="number" id="iter-n" class="input-num" value="3" min="2" max="5">
+          <label>鬆弛因子 ω (SOR)：</label>
+          <input type="number" id="iter-omega" class="input-text" style="width:70px;" value="1.25" step="0.05">
+          <label>容許誤差 ε：</label>
+          <input type="text" id="iter-tol" class="input-text" style="width:80px;" value="1e-5">
+          <button class="btn btn-primary" onclick="initMatrixInput('iter-grid', 'iter-n', 'iter-n', true)">生成 Ax = b</button>
+        </div>
+        <div id="iter-grid" class="matrix-grid-wrapper"></div>
+        <div class="form-group">
+          <button class="btn btn-primary" onclick="runIterativeSolver('jacobi')">Jacobi 方法</button>
+          <button class="btn btn-primary" onclick="runIterativeSolver('gauss-seidel')">Gauss-Seidel 方法</button>
+          <button class="btn btn-primary" onclick="runIterativeSolver('sor')">SOR 方法</button>
+        </div>
+        <div id="iter-output"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= 彈窗 6：非線性方程求解 ================= -->
+  <div id="root-modal" class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">非線性方程求根 (Root-Finding)</h3>
+        <button class="close-btn" onclick="closeModal('root-modal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>目標函數 f(x) = 0：</label>
+          <input type="text" id="root-fx" class="input-text" style="width:250px;" value="x^3 - 2*x - 5">
+          <label>區間 [a, b] 或 初始值 x0, x1：</label>
+          <input type="text" id="root-a" class="input-text" style="width:60px;" value="2">
+          <input type="text" id="root-b" class="input-text" style="width:60px;" value="3">
+        </div>
+        <div class="form-group">
+          <button class="btn btn-primary" onclick="runRootFinding('bisection')">二分法 (Bisection)</button>
+          <button class="btn btn-primary" onclick="runRootFinding('newton')">牛頓法 (Newton-Raphson)</button>
+          <button class="btn btn-primary" onclick="runRootFinding('secant')">割線法 (Secant)</button>
+        </div>
+        <div id="root-output"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= 彈窗 7：數值微積分 ================= -->
+  <div id="calc-num-modal" class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">數值微積分 (Numerical Calculus)</h3>
+        <button class="close-btn" onclick="closeModal('calc-num-modal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <h4>一、數值積分</h4>
+        <div class="form-group">
+          <label>被積函數 f(x)：</label>
+          <input type="text" id="integ-fx" class="input-text" style="width:200px;" value="sin(x)">
+          <label>積分區間 [a, b]：</label>
+          <input type="text" id="integ-a" class="input-text" style="width:60px;" value="0">
+          <input type="text" id="integ-b" class="input-text" style="width:60px;" value="3.14159265">
+          <label>分割數 N：</label>
+          <input type="number" id="integ-n" class="input-num" value="6" min="2" step="2">
+          <button class="btn btn-primary" onclick="runNumericalIntegration()">計算積分</button>
+        </div>
+        <hr style="border-color: var(--border-color);">
+        <h4>二、數值微分</h4>
+        <div class="form-group">
+          <label>函數 f(x)：</label>
+          <input type="text" id="diff-fx" class="input-text" style="width:200px;" value="x^2 * exp(x)">
+          <label>評估點 x0：</label>
+          <input type="text" id="diff-x0" class="input-text" style="width:60px;" value="1.0">
+          <label>步長 h：</label>
+          <input type="text" id="diff-h" class="input-text" style="width:70px;" value="0.001">
+          <button class="btn btn-primary" onclick="runNumericalDifferentiation()">計算微商</button>
+        </div>
+        <div id="calc-num-output"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= 彈窗 8：插值與曲線擬合 ================= -->
+  <div id="interp-modal" class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">插值與最小二乘法 (Interpolation & Fitting)</h3>
+        <button class="close-btn" onclick="closeModal('interp-modal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>資料點 x 向量 (逗號分開)：</label>
+          <input type="text" id="interp-x" class="input-text" style="width:300px;" value="0, 1, 2, 3">
+        </div>
+        <div class="form-group">
+          <label>資料點 y 向量 (逗號分開)：</label>
+          <input type="text" id="interp-y" class="input-text" style="width:300px;" value="1, 3, 2, 5">
+        </div>
+        <div class="form-group">
+          <button class="btn btn-primary" onclick="runLagrangeInterp()">Lagrange 多項式插值</button>
+          <button class="btn btn-primary" onclick="runNewtonInterp()">Newton 差商插值</button>
+          <button class="btn btn-primary" onclick="runLeastSquares()">最小二乘法 (線性擬合)</button>
+        </div>
+        <div id="interp-output"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= 彈窗 9：常微分方程數值解 ================= -->
+  <div id="ode-modal" class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">常微分方程數值解 (Numerical ODEs)</h3>
+        <button class="close-btn" onclick="closeModal('ode-modal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p style="color:var(--text-muted); font-size:0.9rem;">微分方程形式： dy/dt = f(t, y)</p>
+        <div class="form-group">
+          <label>f(t, y) =</label>
+          <input type="text" id="ode-fty" class="input-text" style="width:200px;" value="t - y">
+          <label>初始條件 t0, y0：</label>
+          <input type="text" id="ode-t0" class="input-text" style="width:50px;" value="0">
+          <input type="text" id="ode-y0" class="input-text" style="width:50px;" value="1">
+        </div>
+        <div class="form-group">
+          <label>終點 t_end：</label>
+          <input type="text" id="ode-tend" class="input-text" style="width:60px;" value="2">
+          <label>步長 h：</label>
+          <input type="text" id="ode-h" class="input-text" style="width:60px;" value="0.2">
+        </div>
+        <div class="form-group">
+          <button class="btn btn-primary" onclick="runODESolver('euler')">歐拉法 (Euler)</button>
+          <button class="btn btn-primary" onclick="runODESolver('imp-euler')">補償歐拉法</button>
+          <button class="btn btn-primary" onclick="runODESolver('rk4')">經典四階 Runge-Kutta (RK4)</button>
+        </div>
+        <div id="ode-output"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= JavaScript 腳本區 ================= -->
+  <script>
+    /* --------------------------------------------------
+       1. 頁面切換與 通用 Modal 控制
+    -------------------------------------------------- */
+    function navigateTo(pageId) {
+      document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+      document.getElementById(pageId).classList.add('active');
+    }
+
+    function openModal(id) {
+      document.getElementById(id).classList.add('active');
+      document.body.classList.add('modal-open');
+      if (id === 'base-modal') convertBase();
+      if (id === 'asin-modal') calcInvTrig();
+      if (id === 'perm-calc-modal' || id === 'perm-unk-modal') {
+        initNumpadEvents();
+      }
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).classList.remove('active');
+      document.body.classList.remove('modal-open');
+    }
+
+    function openGaussModal() { openModal('gauss-modal'); generateMatrixInput(); }
+    function closeGaussModal() { closeModal('gauss-modal'); }
+    function openCalcModal() { openModal('calc-modal'); }
+    /* Bug 修正：關閉按鈕 ID 指向 calc-modal */
+    function closeCalcModal() { closeModal('calc-modal'); }
+
+    /* --------------------------------------------------
+       2. 排組計算與解未知數專用 9 格鍵盤邏輯
+    -------------------------------------------------- */
+    let currentNumpadTarget = null;
+
+    function initNumpadEvents() {
+      document.querySelectorAll('.numpad-input').forEach(input => {
+        input.addEventListener('focus', function() {
+          if (currentNumpadTarget) currentNumpadTarget.classList.remove('active');
+          currentNumpadTarget = this;
+          this.classList.add('active');
+        });
+        input.addEventListener('click', function() {
+          if (currentNumpadTarget) currentNumpadTarget.classList.remove('active');
+          currentNumpadTarget = this;
+          this.classList.add('active');
+        });
+        input.addEventListener('keydown', function(e) {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            pressNumpadEnter();
+          }
+        });
+      });
+    }
+
+    function pressNumpadKey(num) {
+      if (!currentNumpadTarget) return;
+      currentNumpadTarget.value += num;
+    }
+
+    function pressNumpadClear() {
+      if (!currentNumpadTarget) return;
+      currentNumpadTarget.value = '';
+    }
+
+    function pressNumpadEnter() {
+      if (!currentNumpadTarget) return;
+      const modal = currentNumpadTarget.closest('.modal-overlay');
+      if (!modal) return;
+
+      const inputs = Array.from(modal.querySelectorAll('.numpad-input'));
+      const currentIndex = inputs.indexOf(currentNumpadTarget);
+
+      if (currentIndex !== -1 && currentIndex < inputs.length - 1) {
+        inputs[currentIndex + 1].focus();
+      } else if (currentIndex === inputs.length - 1) {
+        if (modal.id === 'perm-calc-modal') calcPermutation();
+        else if (modal.id === 'perm-unk-modal') solvePermUnknown();
+      }
+    }
+
+    function updatePermTypeDisplay() {
+      const type = document.querySelector('input[name="perm-type"]:checked').value;
+      document.getElementById('perm-symbol-text').textContent = type;
+    }
+
+    function updateUnkTypeDisplay() {
+      const type = document.querySelector('input[name="unk-type"]:checked').value;
+      document.getElementById('unk-symbol-text').textContent = type;
+    }
+
+    /* --------------------------------------------------
+       3. 排組核心數學邏輯 (BigInt 精確高精度計算)
+    -------------------------------------------------- */
+    function bigFact(n) {
+      if (n < 0n) return 0n;
+      let res = 1n;
+      for (let i = 2n; i <= n; i++) res *= i;
+      return res;
+    }
+
+    function bigP(n, r) {
+      if (n < 0n || r < 0n || n < r) return null;
+      let res = 1n;
+      for (let i = 0n; i < r; i++) res *= (n - i);
+      return res;
+    }
+
+    function bigC(n, r) {
+      if (n < 0n || r < 0n || n < r) return null;
+      let p = bigP(n, r);
+      let f = bigFact(r);
+      return p / f;
+    }
+
+    function bigH(n, r) {
+      if (n < 0n || r < 0n) return null;
+      if (n === 0n && r === 0n) return 1n;
+      if (n === 0n) return 0n;
+      return bigC(n + r - 1n, r);
+    }
+
+    /* 工具 1 計算邏輯：排組計算 */
+    function calcPermutation() {
+      const type = document.querySelector('input[name="perm-type"]:checked').value;
+      const nStr = document.getElementById('perm-n').value.trim();
+      const rStr = document.getElementById('perm-r').value.trim();
+      const out = document.getElementById('perm-calc-output');
+
+      if (nStr === '' || rStr === '') {
+        out.innerHTML = '<div class="result-card"><p style="color:#f87171">⚠️ 請點擊空格並輸入完整的 n 與 r 數值</p></div>';
+        return;
+      }
+
+      try {
+        const n = BigInt(nStr);
+        const r = BigInt(rStr);
+        let ans = null;
+        let formula = '';
+
+        if (type === 'P') {
+          ans = bigP(n, r);
+          formula = `P(${n}, ${r}) = \\frac{${n}!}{(${n}-${r})!}`;
+        } else if (type === 'C') {
+          ans = bigC(n, r);
+          formula = `C(${n}, ${r}) = \\frac{${n}!}{${r}! \\times (${n}-${r})!}`;
+        } else if (type === 'H') {
+          ans = bigH(n, r);
+          formula = `H(${n}, ${r}) = C(${n}+${r}-1, ${r}) = C(${n + r - 1n}, ${r})`;
+        }
+
+        if (ans === null) {
+          out.innerHTML = '<div class="result-card"><p style="color:#f87171">❌ 不合法的輸入範圍（必須滿足 $n \\ge r \\ge 0$）</p></div>';
+          return;
+        }
+
+        out.innerHTML = `
+          <div class="result-card">
+            <div class="result-title">${type} 排組計算結果</div>
+            <p style="margin-bottom:0.5rem;"><strong>展算公式：</strong> ${renderLaTeX(formula, false)}</p>
+            <p style="font-size:1.4rem; color:#4ade80; margin-top:0.5rem;">
+              <strong>計算結果 = ${ans.toString()}</strong>
+            </p>
+          </div>
+        `;
+      } catch (e) {
+        out.innerHTML = '<div class="result-card"><p style="color:#f87171">❌ 請輸入正確的整數格式</p></div>';
+      }
+    }
+
+    /* 工具 2 計算邏輯：解排組未知數 */
+    function solvePermUnknown() {
+      const type = document.querySelector('input[name="unk-type"]:checked').value;
+      const aStr = document.getElementById('unk-a').value.trim();
+      const rStr = document.getElementById('unk-r').value.trim();
+      const kStr = document.getElementById('unk-k').value.trim();
+      const out = document.getElementById('perm-unk-output');
+
+      if (rStr === '' || kStr === '') {
+        out.innerHTML = '<div class="result-card"><p style="color:#f87171">⚠️ 請填寫完整的 r 與等號右側數值</p></div>';
+        return;
+      }
+
+      try {
+        const a = aStr === '' ? 0n : BigInt(aStr);
+        const r = BigInt(rStr);
+        const K = BigInt(kStr);
+
+        let solvedN = null;
+        let eqLaTeX = `${type}(n + ${a}, ${r}) = ${K}`;
+
+        // 在合理範圍內搜尋整數解 n
+        for (let n = 0n; n <= 10000n; n++) {
+          let N = n + a;
+          let val = null;
+          if (type === 'P') val = bigP(N, r);
+          else if (type === 'C') val = bigC(N, r);
+          else if (type === 'H') val = bigH(N, r);
+
+          if (val !== null && val === K) {
+            solvedN = n;
+            break;
+          }
+          if (val !== null && val > K && r > 0n) {
+            break; // 單調遞增，超過目標值即可終止搜尋
+          }
+        }
+
+        if (solvedN === null) {
+          out.innerHTML = `
+            <div class="result-card">
+              <div class="result-title">求解結果</div>
+              <p>方程式：${renderLaTeX(eqLaTeX, false)}</p>
+              <p style="color:#f87171; margin-top:0.5rem;">❌ 在合理範圍（$n \\ge 0$）內找不到符合的整數解 $n$。</p>
+            </div>
+          `;
+          return;
+        }
+
+        out.innerHTML = `
+          <div class="result-card">
+            <div class="result-title">求解成功！</div>
+            <p style="margin-bottom:0.5rem;"><strong>目標方程式：</strong> ${renderLaTeX(eqLaTeX, false)}</p>
+            <p style="font-size:1.5rem; color:#4ade80; margin-top:0.5rem;">
+              <strong>計算結果： n = ${solvedN.toString()}</strong>
+            </p>
+          </div>
+        `;
+      } catch (e) {
+        out.innerHTML = '<div class="result-card"><p style="color:#f87171">❌ 請輸入正確的整數數值</p></div>';
+      }
+    }
+
+    /* --------------------------------------------------
+       4. 多進制換算器 (Base Converter)
+    -------------------------------------------------- */
+    function swapBases() {
+      const srcSelect = document.getElementById('src-base');
+      const tgtSelect = document.getElementById('tgt-base');
+      const temp = srcSelect.value;
+      srcSelect.value = tgtSelect.value;
+      tgtSelect.value = temp;
+      convertBase();
+    }
+
+    function convertBase() {
+      const srcBase = parseInt(document.getElementById('src-base').value);
+      const tgtBase = parseInt(document.getElementById('tgt-base').value);
+      const inputStr = document.getElementById('base-input').value.trim();
+      const outputEl = document.getElementById('base-output-val');
+
+      if (!inputStr) {
+        outputEl.textContent = '-';
+        return;
+      }
+
+      try {
+        const decVal = parseInt(inputStr, srcBase);
+        if (isNaN(decVal)) {
+          outputEl.textContent = '❌ 非法的數值格式';
+          outputEl.style.color = '#f87171';
+          return;
+        }
+        const converted = decVal.toString(tgtBase).toUpperCase();
+        outputEl.textContent = converted;
+        outputEl.style.color = '#4ade80';
+      } catch (e) {
+        outputEl.textContent = '❌ 計算錯誤';
+        outputEl.style.color = '#f87171';
+      }
+    }
+
+    /* --------------------------------------------------
+       5. 反三角函數計算器 (Inverse Trigonometric)
+    -------------------------------------------------- */
+    function calcInvTrig() {
+      const unit = document.querySelector('input[name="inv-unit"]:checked').value;
+      const isDeg = unit === 'deg';
+      const radToDeg = 180 / Math.PI;
+
+      const xAsin = parseFloat(document.getElementById('inv-x-asin').value);
+      const xAcos = parseFloat(document.getElementById('inv-x-acos').value);
+      const xAtan = parseFloat(document.getElementById('inv-x-atan').value);
+
+      const formatVal = (val) => {
+        if (isNaN(val)) return '<span style="color:#f87171">無定義 (Domain Error)</span>';
+        let res = isDeg ? val * radToDeg : val;
+        let suffix = isDeg ? '°' : ' rad';
+        return `<strong>${res.toFixed(6)}${suffix}</strong>`;
+      };
+
+      const valAsin = Math.asin(xAsin);
+      const valAcos = Math.acos(xAcos);
+      const valAtan = Math.atan(xAtan);
+
+      const outContainer = document.getElementById('inv-trig-output');
+      outContainer.innerHTML = `
+        <div class="result-card">
+          <div class="result-title">反三角函數計算結果 (${isDeg ? '角度 °' : '弧度 rad'})</div>
+          <p style="margin-bottom:0.4rem;">arcsin(${xAsin}) = ${formatVal(valAsin)}</p>
+          <p style="margin-bottom:0.4rem;">arccos(${xAcos}) = ${formatVal(valAcos)}</p>
+          <p>arctan(${xAtan}) = ${formatVal(valAtan)}</p>
+        </div>
+      `;
+    }
+
+    /* --------------------------------------------------
+       6. KaTeX 數學渲染與通用工具
+    -------------------------------------------------- */
+    function renderLaTeX(latex, displayMode = true) {
+      if (typeof katex === 'undefined') return latex;
+      try {
+        return katex.renderToString(latex, { displayMode: displayMode, throwOnError: false });
+      } catch (e) {
+        return latex;
+      }
+    }
+
+    function matrixToLaTeX(mat) {
+      let html = "\\begin{bmatrix}";
+      for (let i = 0; i < mat.length; i++) {
+        let row = [];
+        for (let j = 0; j < mat[i].length; j++) {
+          let val = mat[i][j];
+          row.push(Math.abs(val) < 1e-10 ? "0" : Number(val.toFixed(4)).toString());
+        }
+        html += row.join(" & ");
+        if (i < mat.length - 1) html += " \\\\ ";
+      }
+      html += "\\end{bmatrix}";
+      return html;
+    }
+
+    function matrixFractionToLaTeX(mat) {
+      let html = "\\begin{bmatrix}";
+      for (let i = 0; i < mat.length; i++) {
+        let row = mat[i].map(f => f.toLaTeX());
+        html += row.join(" & ");
+        if (i < mat.length - 1) html += " \\\\ ";
+      }
+      html += "\\end{bmatrix}";
+      return html;
+    }
+
+    function initMatrixInput(targetDivId, rowsInputId, colsInputId, isAugmented = false) {
+      const r = parseInt(document.getElementById(rowsInputId).value);
+      const c = parseInt(document.getElementById(colsInputId).value) + (isAugmented ? 1 : 0);
+      const wrapper = document.getElementById(targetDivId);
+      
+      let html = '<table class="matrix-input-table">';
+      for (let i = 0; i < r; i++) {
+        html += '<tr>';
+        for (let j = 0; j < c; j++) {
+          let sepClass = (isAugmented && j === c - 2) ? 'class="augmented-sep"' : '';
+          let defaultVal = (i === j && j < r) ? '1' : '0';
+          html += `<td ${sepClass}><input type="text" id="${targetDivId}-${i}-${j}" value="${defaultVal}"></td>`;
+        }
+        html += '</tr>';
+      }
+      html += '</table>';
+      wrapper.innerHTML = html;
+    }
+
+    function readMatrixValues(targetDivId, rows, cols) {
+      let A = [];
+      for (let i = 0; i < rows; i++) {
+        let row = [];
+        for (let j = 0; j < cols; j++) {
+          let v = parseFloat(document.getElementById(`${targetDivId}-${i}-${j}`).value) || 0;
+          row.push(v);
+        }
+        A.push(row);
+      }
+      return A;
+    }
+
+    /* --------------------------------------------------
+       7. 自訂動態表達式解析器 (Math Parser)
+    -------------------------------------------------- */
+    function evaluateMath(expr, scope = {}) {
+      let jsExpr = expr
+        .replace(/\bpi\b/g, 'Math.PI')
+        .replace(/\be\b/g, 'Math.E')
+        .replace(/\bsin\b/g, 'Math.sin')
+        .replace(/\bcos\b/g, 'Math.cos')
+        .replace(/\btan\b/g, 'Math.tan')
+        .replace(/\bsqrt\b/g, 'Math.sqrt')
+        .replace(/\bexp\b/g, 'Math.exp')
+        .replace(/\bln\b/g, 'Math.log')
+        .replace(/\blog\b/g, 'Math.log10')
+        .replace(/\^/g, '**');
+
+      let keys = Object.keys(scope);
+      let vals = Object.values(scope);
+      return new Function(...keys, `"use strict"; return (${jsExpr});`)(...vals);
+    }
+
+    /* --------------------------------------------------
+       8. 分數演算類別 (Fraction Class)
+    -------------------------------------------------- */
+    function gcd(a, b) { a = Math.abs(a); b = Math.abs(b); while (b) { let t = b; b = a % b; a = t; } return a; }
+    class Fraction {
+      constructor(n, d = 1) {
+        if (typeof n === 'string' && n.includes('/')) {
+          let parts = n.split('/');
+          n = parseInt(parts[0]);
+          d = parseInt(parts[1]);
+        }
+        if (d === 0) throw new Error("分母不能為 0");
+        if (d < 0) { n = -n; d = -d; }
+        const g = gcd(Math.round(n), Math.round(d));
+        this.n = Math.round(n) / g;
+        this.d = Math.round(d) / g;
+      }
+      add(f) { return new Fraction(this.n * f.d + f.n * this.d, this.d * f.d); }
+      sub(f) { return new Fraction(this.n * f.d - f.n * this.d, this.d * f.d); }
+      mul(f) { return new Fraction(this.n * f.n, this.d * f.d); }
+      div(f) { return new Fraction(this.n * f.d, this.d * f.n); }
+      isZero() { return this.n === 0; }
+      toLaTeX() {
+        if (this.d === 1) return `${this.n}`;
+        return this.n < 0 ? `-\\frac{${Math.abs(this.n)}}{${this.d}}` : `\\frac{${this.n}}{${this.d}}`;
+      }
+      toNumber() { return this.n / this.d; }
+    }
+
+    /* 高斯消去法 UI 與計算 logic */
+    function generateMatrixInput() {
+      const m = parseInt(document.getElementById('input-m').value) || 3;
+      const n = parseInt(document.getElementById('input-n').value) || 3;
+      const table = document.getElementById('matrix-table');
+      let html = '';
+      for (let i = 0; i < m; i++) {
+        html += '<tr>';
+        for (let j = 0; j <= n; j++) {
+          let sepClass = (j === n - 1) ? 'class="augmented-sep"' : '';
+          html += `<td ${sepClass}><input type="text" id="gauss-${i}-${j}" inputmode="numeric" autocomplete="off" aria-label="第 ${i + 1} 列第 ${j + 1} 欄"></td>`;
+        }
+        html += '</tr>';
+      }
+      table.innerHTML = html;
+      table.addEventListener('keydown', function(event) {
+        const input = event.target;
+        if (!input.matches('input[id^="gauss-"]')) return;
+        if (event.key === 'Enter') {
+          event.preventDefault();
+          const match = input.id.match(/^gauss-(\d+)-(\d+)$/);
+          const row = Number(match[1]);
+          const col = Number(match[2]);
+          const next = col < n ? document.getElementById(`gauss-${row}-${col + 1}`)
+            : (row + 1 < m ? document.getElementById(`gauss-${row + 1}-0`) : null);
+          if (next) next.focus();
+          return;
+        }
+        if (event.ctrlKey || event.metaKey || event.altKey || event.key.length !== 1) return;
+        if (!/^[0-9]$/.test(event.key)) event.preventDefault();
+      });
+      table.addEventListener('paste', function(event) {
+        if (event.target.matches('input[id^="gauss-"]')) event.preventDefault();
+      });
+      document.getElementById('matrix-input-section').style.display = 'block';
+      document.getElementById('output-section').innerHTML = '';
+    }
+
+    function clearMatrixInputs() {
+      const m = parseInt(document.getElementById('input-m').value) || 3;
+      const n = parseInt(document.getElementById('input-n').value) || 3;
+      for (let i = 0; i < m; i++) {
+        for (let j = 0; j <= n; j++) {
+          const el = document.getElementById(`gauss-${i}-${j}`);
+          if (el) el.value = '';
+        }
+      }
+      document.getElementById('output-section').innerHTML = '';
+    }
+
+    function calculateGauss() {
+      const m = parseInt(document.getElementById('input-m').value) || 3;
+      const n = parseInt(document.getElementById('input-n').value) || 3;
+      let mat = [];
+      try {
+        for (let i = 0; i < m; i++) {
+          let row = [];
+          for (let j = 0; j <= n; j++) {
+            let valStr = document.getElementById(`gauss-${i}-${j}`).value.trim();
+            row.push(new Fraction(valStr || '0'));
+          }
+          mat.push(row);
+        }
+      } catch (e) {
+        document.getElementById('output-section').innerHTML = '<div class="result-card"><p style="color:#f87171">❌ 請輸入有效的整數或分數</p></div>';
+        return;
+      }
+
+      let lead = 0;
+      for (let r = 0; r < m; r++) {
+        if (n <= lead) break;
+        let i = r;
+        while (mat[i][lead].isZero()) {
+          i++;
+          if (i === m) {
+            i = r;
+            lead++;
+            if (n === lead) break;
+          }
+        }
+        if (n === lead) break;
+
+        if (i !== r) [mat[i], mat[r]] = [mat[r], mat[i]];
+
+        let val = mat[r][lead];
+        if (!val.isZero()) {
+          for (let j = 0; j <= n; j++) mat[r][j] = mat[r][j].div(val);
+        }
+
+        for (let k = 0; k < m; k++) {
+          if (k !== r) {
+            let factor = mat[k][lead];
+            if (!factor.isZero()) {
+              for (let j = 0; j <= n; j++) {
+                mat[k][j] = mat[k][j].sub(factor.mul(mat[r][j]));
+              }
+            }
+          }
+        }
+        lead++;
+      }
+
+      document.getElementById('output-section').innerHTML = `
+        <div class="result-card">
+          <div class="result-title">簡約列梯形式 (RREF) 計算結果</div>
+          <p>最終 RREF 增廣矩陣：</p>
+          <div style="margin-top: 0.5rem;">${renderLaTeX(matrixFractionToLaTeX(mat))}</div>
+        </div>
+      `;
+    }
+
+    /* --------------------------------------------------
+       9. 線性代數與數值矩陣演算法
+    -------------------------------------------------- */
+    function runLUDecomp() {
+      const n = parseInt(document.getElementById('decomp-n').value);
+      const A = readMatrixValues('decomp-grid', n, n);
+      let L = Array.from({length: n}, (_, i) => Array.from({length: n}, (_, j) => i === j ? 1 : 0));
+      let U = Array.from({length: n}, () => Array(n).fill(0));
+
+      for (let i = 0; i < n; i++) {
+        for (let k = i; k < n; k++) {
+          let sum = 0;
+          for (let j = 0; j < i; j++) sum += (L[i][j] * U[j][k]);
+          U[i][k] = A[i][k] - sum;
+        }
+        for (let k = i + 1; k < n; k++) {
+          let sum = 0;
+          for (let j = 0; j < i; j++) sum += (L[k][j] * U[j][i]);
+          L[k][i] = (A[k][i] - sum) / U[i][i];
+        }
+      }
+
+      const out = document.getElementById('decomp-output');
+      out.innerHTML = `
+        <div class="result-card">
+          <div class="result-title">LU 分解結果</div>
+          <p>矩陣 A = L &times; U</p>
+          <div style="display:flex; gap:1rem; align-items:center; flex-wrap:wrap; margin-top:0.5rem;">
+            <div>L (下三角)：${renderLaTeX(matrixToLaTeX(L))}</div>
+            <div>U (上三角)：${renderLaTeX(matrixToLaTeX(U))}</div>
+          </div>
+        </div>
+      `;
+    }
+
+    function runQRDecomp() {
+      const n = parseInt(document.getElementById('decomp-n').value);
+      const A = readMatrixValues('decomp-grid', n, n);
+      let Q = Array.from({length: n}, () => Array(n).fill(0));
+      let R = Array.from({length: n}, () => Array(n).fill(0));
+
+      for (let j = 0; j < n; j++) {
+        let v = A.map(row => row[j]);
+        for (let i = 0; i < j; i++) {
+          let q_i = Q.map(row => row[i]);
+          R[i][j] = v.reduce((sum, val, idx) => sum + val * q_i[idx], 0);
+          for (let k = 0; k < n; k++) v[k] -= R[i][j] * q_i[k];
+        }
+        R[j][j] = Math.sqrt(v.reduce((sum, val) => sum + val * val, 0));
+        for (let k = 0; k < n; k++) Q[k][j] = v[k] / R[j][j];
+      }
+
+      document.getElementById('decomp-output').innerHTML = `
+        <div class="result-card">
+          <div class="result-title">QR 分解 (Gram-Schmidt) 結果</div>
+          <p>矩陣 A = Q &times; R</p>
+          <div style="display:flex; gap:1rem; align-items:center; flex-wrap:wrap; margin-top:0.5rem;">
+            <div>Q (正交矩陣)：${renderLaTeX(matrixToLaTeX(Q))}</div>
+            <div>R (上三角矩陣)：${renderLaTeX(matrixToLaTeX(R))}</div>
+          </div>
+        </div>
+      `;
+    }
+
+    function runEigDecomp() {
+      const n = parseInt(document.getElementById('decomp-n').value);
+      const A = readMatrixValues('decomp-grid', n, n);
+      let x = Array(n).fill(1);
+      let lambda = 0;
+
+      for (let iter = 0; iter < 100; iter++) {
+        let y = Array(n).fill(0);
+        for (let i = 0; i < n; i++) {
+          for (let j = 0; j < n; j++) y[i] += A[i][j] * x[j];
+        }
+        lambda = Math.max(...y.map(Math.abs));
+        x = y.map(v => v / lambda);
+      }
+
+      document.getElementById('decomp-output').innerHTML = `
+        <div class="result-card">
+          <div class="result-title">主特徵值與特徵向量 (Power Iteration)</div>
+          <p>最大特徵值 λ₁ ≈ <strong>${lambda.toFixed(6)}</strong></p>
+          <p>對應特徵向量 v₁ ≈ ${renderLaTeX(matrixToLaTeX([x]))}</p>
+        </div>
+      `;
+    }
+
+    let currentInverseMatrixFrac = null;
+
+    function runDetInverse() {
+      const n = parseInt(document.getElementById('det-n').value);
+      const rawA = readMatrixValues('det-grid', n, n);
+
+      function getDetFrac(M) {
+        let size = M.length;
+        if (size === 1) return M[0][0];
+        if (size === 2) return M[0][0].mul(M[1][1]).sub(M[0][1].mul(M[1][0]));
+        let det = new Fraction(0);
+        for (let i = 0; i < size; i++) {
+          let sub = M.slice(1).map(row => row.filter((_, j) => j !== i));
+          let term = M[0][i].mul(getDetFrac(sub));
+          det = (i % 2 === 0) ? det.add(term) : det.sub(term);
+        }
+        return det;
+      }
+
+      function invertMatrixFraction(M) {
+        let size = M.length;
+        let aug = M.map((row, i) => {
+          let identityRow = Array.from({length: size}, (_, idx) => new Fraction(i === idx ? 1 : 0));
+          return [...row.map(v => new Fraction(v.n, v.d)), ...identityRow];
+        });
+
+        for (let i = 0; i < size; i++) {
+          let maxRow = i;
+          while (maxRow < size && aug[maxRow][i].isZero()) maxRow++;
+          if (maxRow === size) return null;
+
+          if (maxRow !== i) [aug[i], aug[maxRow]] = [aug[maxRow], aug[i]];
+
+          let pivot = aug[i][i];
+          for (let j = 0; j < 2 * size; j++) aug[i][j] = aug[i][j].div(pivot);
+
+          for (let k = 0; k < size; k++) {
+            if (k !== i) {
+              let factor = aug[k][i];
+              if (!factor.isZero()) {
+                for (let j = 0; j < 2 * size; j++) {
+                  aug[k][j] = aug[k][j].sub(factor.mul(aug[i][j]));
+                }
+              }
+            }
+          }
+        }
+        return aug.map(row => row.slice(size));
+      }
+
+      let A_frac = rawA.map(row => row.map(v => new Fraction(v)));
+      let detFrac = getDetFrac(A_frac);
+      let isNonSingular = !detFrac.isZero();
+
+      let traceFrac = new Fraction(0);
+      for (let i = 0; i < n; i++) traceFrac = traceFrac.add(A_frac[i][i]);
+
+      if (isNonSingular) {
+        currentInverseMatrixFrac = invertMatrixFraction(A_frac);
+      } else {
+        currentInverseMatrixFrac = null;
+      }
+
+      let html = `
+        <div class="result-card">
+          <div class="result-title">矩陣基本特徵分析 (精確分數演算)</div>
+          <p>行列式 det(A) = ${renderLaTeX(detFrac.toLaTeX(), false)}</p>
+          <p>跡數 tr(A) = ${renderLaTeX(traceFrac.toLaTeX(), false)}</p>
+          <p>反矩陣狀態：${isNonSingular ? '<span style="color:#4ade80">存在 (行列式 ≠ 0)</span>' : '<span style="color:#f87171">不存在 (行列式 = 0)</span>'}</p>
+          ${isNonSingular ? `
+            <button id="btn-toggle-inverse" class="btn btn-toggle" style="margin-top: 0.75rem;" onclick="toggleInverseResult()">顯示精確分數反矩陣</button>
+            <div id="inverse-matrix-container" style="display: none; margin-top: 1rem;">
+              <p style="color:#a5b4fc; font-weight:600; margin-bottom:0.3rem;">反矩陣 A⁻¹ (分數無誤差形式)：</p>
+              ${renderLaTeX(matrixFractionToLaTeX(currentInverseMatrixFrac))}
+            </div>
+          ` : ''}
+        </div>
+      `;
+
+      document.getElementById('det-output').innerHTML = html;
+    }
+
+    function toggleInverseResult() {
+      const container = document.getElementById('inverse-matrix-container');
+      const btn = document.getElementById('btn-toggle-inverse');
+
+      if (container.style.display === 'none') {
+        container.style.display = 'block';
+        btn.innerText = '隱藏反矩陣';
+      } else {
+        container.style.display = 'none';
+        btn.innerText = '顯示精確分數反矩陣';
+      }
+    }
+
+    function runIterativeSolver(type) {
+      const n = parseInt(document.getElementById('iter-n').value);
+      const Ab = readMatrixValues('iter-grid', n, n + 1);
+      const tol = parseFloat(document.getElementById('iter-tol').value) || 1e-5;
+      const omega = parseFloat(document.getElementById('iter-omega').value) || 1.0;
+
+      let A = Ab.map(r => r.slice(0, n));
+      let b = Ab.map(r => r[n]);
+      let x = Array(n).fill(0);
+      let logs = [];
+
+      for (let iter = 1; iter <= 50; iter++) {
+        let x_old = [...x];
+        for (let i = 0; i < n; i++) {
+          let sum = 0;
+          for (let j = 0; j < n; j++) {
+            if (i !== j) {
+              sum += A[i][j] * (type === 'jacobi' ? x_old[j] : x[j]);
+            }
+          }
+          let x_new = (b[i] - sum) / A[i][i];
+          x[i] = type === 'sor' ? (1 - omega) * x_old[i] + omega * x_new : x_new;
+        }
+
+        let err = Math.max(...x.map((v, idx) => Math.abs(v - x_old[idx])));
+        logs.push({ iter, x: [...x], err });
+        if (err < tol) break;
+      }
+
+      let tableHTML = `<table class="data-table"><thead><tr><th>疊代輪次</th><th>x 向量解</th><th>相對誤差</th></tr></thead><tbody>`;
+      logs.forEach(l => {
+        tableHTML += `<tr><td>${l.iter}</td><td>[${l.x.map(v => v.toFixed(5)).join(', ')}]</td><td>${l.err.toExponential(4)}</td></tr>`;
+      });
+      tableHTML += `</tbody></table>`;
+
+      document.getElementById('iter-output').innerHTML = `
+        <div class="result-card">
+          <div class="result-title">${type.toUpperCase()} 方法求解收斂過程</div>
+          ${tableHTML}
+        </div>
+      `;
+    }
+
+    /* --------------------------------------------------
+       10. 數值分析與微積分演算法
+    -------------------------------------------------- */
+    function runRootFinding(method) {
+      const fxStr = document.getElementById('root-fx').value;
+      let a = parseFloat(document.getElementById('root-a').value);
+      let b = parseFloat(document.getElementById('root-b').value);
+      let logs = [];
+
+      const f = (x) => evaluateMath(fxStr, { x });
+
+      if (method === 'bisection') {
+        for (let k = 1; k <= 30; k++) {
+          let c = (a + b) / 2;
+          let fc = f(c);
+          let err = Math.abs(b - a) / 2;
+          logs.push({ k, xn: c, fxn: fc, err });
+          if (err < 1e-6 || Math.abs(fc) < 1e-6) break;
+          if (f(a) * fc < 0) b = c; else a = c;
+        }
+      } else if (method === 'newton') {
+        let x0 = a;
+        for (let k = 1; k <= 30; k++) {
+          let df = (f(x0 + 1e-6) - f(x0 - 1e-6)) / 2e-6;
+          let x1 = x0 - f(x0) / df;
+          let err = Math.abs(x1 - x0);
+          logs.push({ k, xn: x1, fxn: f(x1), err });
+          if (err < 1e-6) break;
+          x0 = x1;
+        }
+      } else if (method === 'secant') {
+        let x0 = a, x1 = b;
+        for (let k = 1; k <= 30; k++) {
+          let fx0 = f(x0), fx1 = f(x1);
+          if (Math.abs(fx1 - fx0) < 1e-12) break;
+          let x2 = x1 - fx1 * (x1 - x0) / (fx1 - fx0);
+          let err = Math.abs(x2 - x1);
+          logs.push({ k, xn: x2, fxn: f(x2), err });
+          if (err < 1e-6) break;
+          x0 = x1;
+          x1 = x2;
+        }
+      }
+
+      let tableHTML = `<table class="data-table"><thead><tr><th>步驟 k</th><th>估計根 x_n</th><th>f(x_n)</th><th>相對誤差</th></tr></thead><tbody>`;
+      logs.forEach(l => {
+        tableHTML += `<tr><td>${l.k}</td><td>${l.xn.toFixed(7)}</td><td>${l.fxn.toExponential(4)}</td><td>${l.err.toExponential(4)}</td></tr>`;
+      });
+      tableHTML += `</tbody></table>`;
+
+      document.getElementById('root-output').innerHTML = `
+        <div class="result-card">
+          <div class="result-title">求根疊代過程 (${method})</div>
+          ${tableHTML}
+        </div>
+      `;
+    }
+
+    function runNumericalIntegration() {
+      const fxStr = document.getElementById('integ-fx').value;
+      const a = parseFloat(document.getElementById('integ-a').value);
+      const b = parseFloat(document.getElementById('integ-b').value);
+      const n = parseInt(document.getElementById('integ-n').value);
+      const f = (x) => evaluateMath(fxStr, { x });
+
+      const h = (b - a) / n;
+      let trapSum = 0.5 * (f(a) + f(b));
+      for (let i = 1; i < n; i++) trapSum += f(a + i * h);
+      let trapResult = trapSum * h;
+
+      let simpSum = f(a) + f(b);
+      for (let i = 1; i < n; i++) simpSum += (i % 2 === 1 ? 4 : 2) * f(a + i * h);
+      let simpResult = simpSum * (h / 3);
+
+      document.getElementById('calc-num-output').innerHTML = `
+        <div class="result-card">
+          <div class="result-title">數值積分結果</div>
+          <p>梯形法 (Trapezoidal Rule) 近似值：<strong>${trapResult.toFixed(8)}</strong></p>
+          <p>Simpson 1/3 法則近似值：<strong>${simpResult.toFixed(8)}</strong></p>
+        </div>
+      `;
+    }
+
+    function runNumericalDifferentiation() {
+      const fxStr = document.getElementById('diff-fx').value;
+      const x0 = parseFloat(document.getElementById('diff-x0').value);
+      const h = parseFloat(document.getElementById('diff-h').value);
+      const f = (x) => evaluateMath(fxStr, { x });
+
+      let fwd = (f(x0 + h) - f(x0)) / h;
+      let bwd = (f(x0) - f(x0 - h)) / h;
+      let cen = (f(x0 + h) - f(x0 - h)) / (2 * h);
+
+      document.getElementById('calc-num-output').innerHTML = `
+        <div class="result-card">
+          <div class="result-title">數值微分結果 (於 x0 = ${x0})</div>
+          <p>前向差分 (Forward Difference)：<strong>${fwd.toFixed(7)}</strong></p>
+          <p>後向差分 (Backward Difference)：<strong>${bwd.toFixed(7)}</strong></p>
+          <p>中心差分 (Central Difference)：<strong>${cen.toFixed(7)}</strong></p>
+        </div>
+      `;
+    }
+
+    /* --------------------------------------------------
+       11. 插值與曲線擬合演算法
+    -------------------------------------------------- */
+    function runLagrangeInterp() {
+      const X = document.getElementById('interp-x').value.split(',').map(Number);
+      const Y = document.getElementById('interp-y').value.split(',').map(Number);
+      
+      let terms = [];
+      for (let i = 0; i < X.length; i++) {
+        terms.push(`L_${i}(x) \\cdot (${Y[i]})`);
+      }
+      let polyLaTeX = "P(x) = " + terms.join(" + ");
+
+      document.getElementById('interp-output').innerHTML = `
+        <div class="result-card">
+          <div class="result-title">Lagrange 插值多項式</div>
+          <p>${renderLaTeX(polyLaTeX)}</p>
+        </div>
+      `;
+    }
+
+    function runLeastSquares() {
+      const X = document.getElementById('interp-x').value.split(',').map(Number);
+      const Y = document.getElementById('interp-y').value.split(',').map(Number);
+      const n = X.length;
+
+      let sumX = 0, sumY = 0, sumXY = 0, sumXX = 0;
+      for (let i = 0; i < n; i++) {
+        sumX += X[i]; sumY += Y[i];
+        sumXY += X[i] * Y[i]; sumXX += X[i] * X[i];
+      }
+
+      let m = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
+      let c = (sumY - m * sumX) / n;
+
+      document.getElementById('interp-output').innerHTML = `
+        <div class="result-card">
+          <div class="result-title">最小二乘法 (線性迴歸擬合)</div>
+          <p>最佳擬合直線： ${renderLaTeX(`y = ${m.toFixed(4)}x + ${c.toFixed(4)}`)}</p>
+        </div>
+      `;
+    }
+
+    function runNewtonInterp() {
+      runLagrangeInterp();
+    }
+
+    /* --------------------------------------------------
+       12. 常微分方程數值解 (ODEs)
+    -------------------------------------------------- */
+    function runODESolver(method) {
+      const ftyStr = document.getElementById('ode-fty').value;
+      let t = parseFloat(document.getElementById('ode-t0').value);
+      let y = parseFloat(document.getElementById('ode-y0').value);
+      const tend = parseFloat(document.getElementById('ode-tend').value);
+      const h = parseFloat(document.getElementById('ode-h').value);
+      const f = (t_val, y_val) => evaluateMath(ftyStr, { t: t_val, y: y_val });
+
+      let logs = [{ t, y }];
+
+      while (t < tend - 1e-9) {
+        if (method === 'euler') {
+          y = y + h * f(t, y);
+        } else if (method === 'imp-euler') {
+          let y_pred = y + h * f(t, y);
+          y = y + (h / 2) * (f(t, y) + f(t + h, y_pred));
+        } else if (method === 'rk4') {
+          let k1 = f(t, y);
+          let k2 = f(t + h / 2, y + (h / 2) * k1);
+          let k3 = f(t + h / 2, y + (h / 2) * k2);
+          let k4 = f(t + h, y + h * k3);
+          y = y + (h / 6) * (k1 + 2 * k2 + 2 * k3 + k4);
+        }
+        t += h;
+        logs.push({ t, y });
+      }
+
+      let tableHTML = `<table class="data-table"><thead><tr><th>時間 t_n</th><th>數值解 y_n</th></tr></thead><tbody>`;
+      logs.forEach(l => {
+        tableHTML += `<tr><td>${l.t.toFixed(4)}</td><td>${l.y.toFixed(7)}</td></tr>`;
+      });
+      tableHTML += `</tbody></table>`;
+
+      document.getElementById('ode-output').innerHTML = `
+        <div class="result-card">
+          <div class="result-title">ODE 數值求解軌跡 (${method.toUpperCase()})</div>
+          ${tableHTML}
+        </div>
+      `;
+    }
+
+    /* --------------------------------------------------
+       13. 高等計算機與求值邏輯
+    -------------------------------------------------- */
+    let calcExpr = '';
+    let calcLastResult = null;
+    let calcHistory = [];
+    let calcJustEqualed = false;
+
+    function formatResult(val) {
+      if (typeof val !== 'number' || isNaN(val) || !isFinite(val)) return 'Error';
+      return Number(val.toFixed(10)).toString();
+    }
+
+    function calcUpdateDisplay(liveResult) {
+      document.getElementById('calc-expr-display').textContent = calcExpr || '';
+      if (liveResult !== undefined) document.getElementById('calc-result-display').textContent = liveResult;
+    }
+
+    function calcInput(val) {
+      if (calcJustEqualed) {
+        calcExpr = ['+', '−', '×', '÷', '^'].includes(val) ? String(calcLastResult ?? '') : '';
+        calcJustEqualed = false;
+      }
+      calcExpr += val;
+      try {
+        const preview = calcEval(calcExpr);
+        calcUpdateDisplay(isFinite(preview) ? formatResult(preview) : '');
+      } catch { calcUpdateDisplay(''); }
+    }
+
+    function calcFn(fn) {
+      if (calcJustEqualed) {
+        calcExpr = fn + String(calcLastResult ?? '') + ')';
+        calcJustEqualed = false;
+        try { calcUpdateDisplay(isFinite(calcEval(calcExpr)) ? formatResult(calcEval(calcExpr)) : 'Error'); } catch { calcUpdateDisplay('Error'); }
+        return;
+      }
+      calcExpr += fn; calcUpdateDisplay();
+    }
+
+    function calcClear() {
+      calcExpr = ''; calcLastResult = null; calcJustEqualed = false;
+      document.getElementById('calc-hist-display').textContent = '';
+      document.getElementById('calc-expr-display').textContent = '';
+      document.getElementById('calc-result-display').textContent = '0';
+    }
+
+    function calcDel() {
+      if (calcJustEqualed) { calcClear(); return; }
+      const fns = ['asin(', 'acos(', 'atan(', 'sqrt(', 'sin(', 'cos(', 'tan(', 'log(', 'ln('];
+      let deleted = false;
+      for (const f of fns) {
+        if (calcExpr.endsWith(f)) { calcExpr = calcExpr.slice(0, -f.length); deleted = true; break; }
+      }
+      if (!deleted) calcExpr = calcExpr.slice(0, -1);
+      try { calcUpdateDisplay(isFinite(calcEval(calcExpr)) ? formatResult(calcEval(calcExpr)) : ''); } catch { calcUpdateDisplay(''); }
+    }
+
+    function calcPercent() {
+      if (calcJustEqualed && calcLastResult !== null) {
+        const r = calcLastResult / 100; calcExpr = formatResult(r); calcLastResult = r;
+        document.getElementById('calc-result-display').textContent = formatResult(r);
+        return;
+      }
+      const pctMatch = calcExpr.match(/(-?\d+\.?\d*)$/);
+      if (pctMatch) {
+        calcExpr = calcExpr.slice(0, -pctMatch[1].length) + (parseFloat(pctMatch[1]) / 100);
+        calcUpdateDisplay('');
+      }
+    }
+
+    function calcToggleSign() {
+      const signMatch = calcExpr.match(/(-?\d+\.?\d*)$/);
+      if (signMatch) {
+        calcExpr = calcExpr.slice(0, -signMatch[1].length) + String(-parseFloat(signMatch[1]));
+        calcUpdateDisplay('');
+      }
+    }
+
+    function calcEval(expr) {
+      if (!expr) return 0;
+      let useDeg = document.getElementById('calc-use-deg').checked;
+      
+      let sanitized = expr
+        .replace(/×/g, '*')
+        .replace(/÷/g, '/')
+        .replace(/−/g, '-')
+        .replace(/π/g, 'Math.PI')
+        .replace(/\be\b/g, 'Math.E')
+        .replace(/\^/g, '**');
+
+      if (useDeg) {
+        sanitized = sanitized
+          .replace(/asin\(/g, '(180/Math.PI)*Math.asin(')
+          .replace(/acos\(/g, '(180/Math.PI)*Math.acos(')
+          .replace(/atan\(/g, '(180/Math.PI)*Math.atan(')
+          .replace(/sin\(/g, 'Math.sin((Math.PI/180)*')
+          .replace(/cos\(/g, 'Math.cos((Math.PI/180)*')
+          .replace(/tan\(/g, 'Math.tan((Math.PI/180)*')
+          .replace(/log\(/g, 'Math.log10(')
+          .replace(/ln\(/g, 'Math.log(')
+          .replace(/sqrt\(/g, 'Math.sqrt(');
+      } else {
+        sanitized = sanitized
+          .replace(/asin\(/g, 'Math.asin(')
+          .replace(/acos\(/g, 'Math.acos(')
+          .replace(/atan\(/g, 'Math.atan(')
+          .replace(/sin\(/g, 'Math.sin(')
+          .replace(/cos\(/g, 'Math.cos(')
+          .replace(/tan\(/g, 'Math.tan(')
+          .replace(/log\(/g, 'Math.log10(')
+          .replace(/ln\(/g, 'Math.log(')
+          .replace(/sqrt\(/g, 'Math.sqrt(');
+      }
+
+      return Function('"use strict"; return (' + sanitized + ')')();
+    }
+
+    function calcEquals() {
+      if (!calcExpr) return;
+      try {
+        const result = calcEval(calcExpr);
+        if (isNaN(result) || !isFinite(result)) {
+          document.getElementById('calc-result-display').textContent = 'Error';
+          return;
+        }
+        const formatted = formatResult(result);
+        document.getElementById('calc-hist-display').textContent = calcExpr + ' =';
+        document.getElementById('calc-result-display').textContent = formatted;
+        
+        calcHistory.unshift(`${calcExpr} = ${formatted}`);
+        if (calcHistory.length > 20) calcHistory.pop();
+        updateCalcHistoryUI();
+
+        calcLastResult = result;
+        calcExpr = formatted;
+        calcJustEqualed = true;
+      } catch (e) {
+        document.getElementById('calc-result-display').textContent = 'Error';
+      }
+    }
+
+    function toggleCalcHistory() {
+      const list = document.getElementById('calc-history-list');
+      list.classList.toggle('show');
+    }
+
+    function updateCalcHistoryUI() {
+      const list = document.getElementById('calc-history-list');
+      list.innerHTML = calcHistory.map(item => `<div class="calc-history-item" onclick="useCalcHistory('${item}')">${item}</div>`).join('');
+    }
+
+    function useCalcHistory(item) {
+      const parts = item.split(' = ');
+      if (parts.length === 2) {
+        calcExpr = parts[0];
+        calcUpdateDisplay();
+      }
+    }
+  </script>
+</body>
+</html>
